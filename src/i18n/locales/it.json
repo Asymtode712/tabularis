@@ -1325,6 +1325,7 @@
     "setNull": "Imposta NULL",
     "setDefault": "Imposta DEFAULT",
     "setEmpty": "Imposta VUOTO",
+    "setRandomUuid": "Imposta UUID casuale",
     "previewReferenced": "Anteprima record correlato",
     "openReferenced": "Apri la riga referenziata in {{table}}",
     "revealCell": "Mostra cella",
