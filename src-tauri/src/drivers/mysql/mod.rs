@@ -563,6 +563,7 @@ pub async fn get_all_foreign_keys_batch(
         JOIN information_schema.REFERENTIAL_CONSTRAINTS rc
         ON kcu.CONSTRAINT_NAME = rc.CONSTRAINT_NAME
         AND kcu.CONSTRAINT_SCHEMA = rc.CONSTRAINT_SCHEMA
+        AND kcu.TABLE_NAME = rc.TABLE_NAME
         WHERE kcu.TABLE_SCHEMA = ?
         AND kcu.REFERENCED_TABLE_NAME IS NOT NULL
         ORDER BY kcu.TABLE_NAME, kcu.CONSTRAINT_NAME, kcu.ORDINAL_POSITION
@@ -1563,6 +1564,37 @@ pub async fn execute_query(
     exec_on_mysql_conn(&mut *conn, query, limit, page, text).await
 }
 
+/// Runs one statement inside `START TRANSACTION READ ONLY` and always rolls
+/// it back, so MySQL rejects any table write the statement attempts (for
+/// example a stored function that modifies data). File writes such as
+/// `INTO OUTFILE` are not table writes; the MCP classifier gates those.
+///
+/// If the rollback fails, or the run is dropped mid-flight, the connection is
+/// closed instead of returned to the pool.
+pub async fn execute_read_only_query(
+    params: &ConnectionParams,
+    query: &str,
+    limit: Option<u32>,
+    page: u32,
+    schema: Option<&str>,
+) -> Result<QueryResult, String> {
+    use sqlx::Executor as _;
+    let mut guard =
+        crate::drivers::common::DetachOnDrop::new(acquire_mysql_conn(params, schema).await?);
+    guard
+        .conn()
+        .execute(sqlx::raw_sql("START TRANSACTION READ ONLY"))
+        .await
+        .map_err(|e| e.to_string())?;
+    let text = TextProto::protocol_only(force_text_protocol(params));
+    let outcome = exec_on_mysql_conn(guard.conn(), query, limit, page, text).await;
+    match guard.conn().execute(sqlx::raw_sql("ROLLBACK")).await {
+        Ok(_) => guard.release(),
+        Err(e) => log::warn!("MySQL: ROLLBACK after a read-only query failed: {e}"),
+    }
+    outcome
+}
+
 /// Runs a sequence of statements on a single pooled connection so that
 /// session-local state (user variables, `LAST_INSERT_ID()`, transactions,
 /// `TEMPORARY TABLE`, `PREPARE`/`EXECUTE`) is preserved across statements.
@@ -2383,6 +2415,17 @@ impl DatabaseDriver for MysqlDriver {
         schema: Option<&str>,
     ) -> Result<crate::models::QueryResult, String> {
         execute_query(params, query, limit, page, schema).await
+    }
+
+    async fn execute_read_only_query(
+        &self,
+        params: &crate::models::ConnectionParams,
+        query: &str,
+        limit: Option<u32>,
+        page: u32,
+        schema: Option<&str>,
+    ) -> Result<crate::models::QueryResult, String> {
+        execute_read_only_query(params, query, limit, page, schema).await
     }
 
     async fn execute_batch(
