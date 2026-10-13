@@ -1568,6 +1568,60 @@ describe("DataGrid UUID context menu", () => {
     );
   });
 
+  it("stages a UUID on a pending insertion row", async () => {
+    const onPendingInsertionChange = vi.fn();
+    const { container } = render(
+      <DataGrid
+        columns={["id", "token"]}
+        data={[[1, "existing-token"]]}
+        tableName="users"
+        pkColumns={["id"]}
+        pendingInsertions={{
+          pending: {
+            tempId: "pending",
+            data: { id: 2, token: null },
+            displayIndex: 1,
+          },
+        }}
+        columnMetadata={[
+          {
+            name: "id",
+            data_type: "integer",
+            is_pk: true,
+            is_nullable: false,
+            is_auto_increment: false,
+          },
+          {
+            name: "token",
+            data_type: "uuid",
+            is_pk: false,
+            is_nullable: false,
+            is_auto_increment: false,
+          },
+        ]}
+        onPendingInsertionChange={onPendingInsertionChange}
+        selectedRows={new Set()}
+        onSelectionChange={vi.fn()}
+      />,
+    );
+
+    fireEvent.contextMenu(
+      container.querySelector(
+        'tr[data-row-index="1"] td[data-col-index="1"]',
+      )!,
+    );
+    fireEvent.click(await screen.findByText("dataGrid.setRandomUuid"));
+
+    expect(onPendingInsertionChange).toHaveBeenCalledOnce();
+    const [tempId, columnName, value] =
+      onPendingInsertionChange.mock.calls[0];
+    expect(tempId).toBe("pending");
+    expect(columnName).toBe("token");
+    expect(value).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    );
+  });
+
   it("does not offer the UUID action in a read-only grid", async () => {
     const { container } = render(
       <DataGrid
