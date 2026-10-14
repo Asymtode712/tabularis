@@ -6,9 +6,11 @@ import { ConnectionErrorBanner } from "../../src/components/ConnectionErrorBanne
 
 describe("ConnectionErrorBanner", () => {
   const clipboardWriteText = vi.fn();
+  let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    user = userEvent.setup({ writeToClipboard: false });
     Object.defineProperty(navigator, "clipboard", {
       configurable: true,
       value: { writeText: clipboardWriteText },
@@ -17,12 +19,6 @@ describe("ConnectionErrorBanner", () => {
   });
 
   it("copies the complete message including collapsed details", async () => {
-    const user = userEvent.setup({ writeToClipboard: false });
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: { writeText: clipboardWriteText },
-      writable: true,
-    });
     const message = "Connection failed\n\nError: TLS certificate detail";
     render(<ConnectionErrorBanner message={message} onClose={vi.fn()} />);
 
@@ -43,7 +39,6 @@ describe("ConnectionErrorBanner", () => {
   });
 
   it("exposes the details toggle state", async () => {
-    const user = userEvent.setup();
     render(
       <ConnectionErrorBanner
         message={"Connection failed\n\nError: TLS certificate detail"}
