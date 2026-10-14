@@ -5,24 +5,32 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ConnectionErrorBanner } from "../../src/components/ConnectionErrorBanner";
 
 describe("ConnectionErrorBanner", () => {
-  const writeText = vi.fn();
+  const clipboardWriteText = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    Object.assign(navigator, {
-      clipboard: { writeText },
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: clipboardWriteText },
+      writable: true,
     });
   });
 
   it("copies the complete message including collapsed details", async () => {
+    const user = userEvent.setup({ writeToClipboard: false });
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: clipboardWriteText },
+      writable: true,
+    });
     const message = "Connection failed\n\nError: TLS certificate detail";
     render(<ConnectionErrorBanner message={message} onClose={vi.fn()} />);
 
     expect(screen.queryByText("Error: TLS certificate detail")).not.toBeInTheDocument();
-    await userEvent.click(screen.getByRole("button", { name: "common.copyError" }));
+    await user.click(screen.getByRole("button", { name: "sidebar.copyError" }));
 
     await waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith(message);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(message);
     });
     expect(await screen.findByText(/copied/i)).toBeInTheDocument();
   });

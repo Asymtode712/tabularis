@@ -67,8 +67,8 @@ export const ConnectionErrorBanner = ({
         type="button"
         onClick={() => copy(message)}
         className="inline-flex items-center gap-1 rounded border border-accent-error/30 px-2 py-1 text-xs text-accent-error/80 hover:bg-accent-error/10 hover:text-accent-error transition-colors select-none shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-        title={t("common.copyError")}
-        aria-label={t("common.copyError")}
+        title={t("sidebar.copyError")}
+        aria-label={t("sidebar.copyError")}
       >
         {copied ? <Check size={14} /> : <Copy size={14} />}
         {copied ? t("common.copied") : t("common.copy")}
