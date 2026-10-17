@@ -231,4 +231,56 @@ mod tests {
             Some("f1")
         );
     }
+
+    // ---- file helpers ----
+
+    #[test]
+    fn missing_folders_file_reads_as_empty() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("folders.json");
+        assert!(read_folders_file(&path).unwrap().is_empty());
+        assert!(read_folders_file_lenient(&path).is_empty());
+    }
+
+    #[test]
+    fn corrupt_folders_file_is_an_error_strictly_but_empty_leniently() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("folders.json");
+        std::fs::write(&path, "{ not json").unwrap();
+
+        assert!(read_folders_file(&path).is_err());
+        assert!(read_folders_file_lenient(&path).is_empty());
+        // The bad file is left in place for manual recovery.
+        assert_eq!(std::fs::read_to_string(&path).unwrap(), "{ not json");
+    }
+
+    #[test]
+    fn a_corrupt_folders_file_leaves_queries_unfiled() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("folders.json");
+        std::fs::write(&path, "[{\"id\": 1}]").unwrap();
+
+        let folders = read_folders_file_lenient(&path);
+        assert_eq!(
+            resolve_folder_id(&meta("q", "c1", Some("f1")), &folders),
+            None
+        );
+    }
+
+    #[test]
+    fn writes_folders_atomically_and_round_trips() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("folders.json");
+        let folders = vec![folder("f1", "c1", "Reports"), folder("f2", "c1", "Ops")];
+
+        write_folders_file(&path, &folders).unwrap();
+        write_folders_file(&path, &folders[..1]).unwrap();
+
+        assert_eq!(read_folders_file(&path).unwrap(), folders[..1].to_vec());
+        let leftovers: Vec<_> = std::fs::read_dir(dir.path())
+            .unwrap()
+            .map(|e| e.unwrap().file_name().into_string().unwrap())
+            .collect();
+        assert_eq!(leftovers, vec!["folders.json".to_string()]);
+    }
 }

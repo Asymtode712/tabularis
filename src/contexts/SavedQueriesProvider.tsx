@@ -20,7 +20,11 @@ export const SavedQueriesProvider = ({ children }: { children: ReactNode }) => {
     try {
       const [result, folderResult] = await Promise.all([
         invoke<SavedQuery[]>('get_saved_queries', { connectionId: activeConnectionId }),
-        invoke<SavedQueryFolder[]>('get_saved_query_folders', { connectionId: activeConnectionId }),
+        // Folders are organizational only: if they can't load, queries still show as unfiled.
+        invoke<SavedQueryFolder[]>('get_saved_query_folders', { connectionId: activeConnectionId }).catch((e) => {
+          console.error("Failed to load saved query folders:", e);
+          return [] as SavedQueryFolder[];
+        }),
       ]);
       setQueries(result);
       setFolders(Array.isArray(folderResult) ? folderResult : []);

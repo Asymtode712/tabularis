@@ -5,6 +5,7 @@ use std::path::PathBuf;
 use tauri::{AppHandle, Runtime};
 use uuid::Uuid;
 
+use crate::query_history::atomic_write;
 use crate::saved_query_folders::{self, SavedQueryFolder};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -67,29 +68,32 @@ fn read_meta<R: Runtime>(app: &AppHandle<R>) -> Result<Vec<SavedQueryMeta>, Stri
 fn write_meta<R: Runtime>(app: &AppHandle<R>, meta: &Vec<SavedQueryMeta>) -> Result<(), String> {
     let path = get_meta_path(app)?;
     let content = serde_json::to_string_pretty(meta).map_err(|e| e.to_string())?;
-    fs::write(path, content).map_err(|e| e.to_string())
+    atomic_write(&path, content.as_bytes())
 }
 
 fn get_folders_path<R: Runtime>(app: &AppHandle<R>) -> Result<PathBuf, String> {
     Ok(get_queries_dir(app)?.join("folders.json"))
 }
 
+/// Strict read, for commands that change folders: a corrupt file must not be
+/// silently overwritten.
 fn read_folders<R: Runtime>(app: &AppHandle<R>) -> Result<Vec<SavedQueryFolder>, String> {
-    let path = get_folders_path(app)?;
-    if !path.exists() {
-        return Ok(Vec::new());
+    saved_query_folders::read_folders_file(&get_folders_path(app)?)
+}
+
+/// Lenient read, for commands that only display or return the folder.
+fn read_folders_or_empty<R: Runtime>(app: &AppHandle<R>) -> Vec<SavedQueryFolder> {
+    match get_folders_path(app) {
+        Ok(path) => saved_query_folders::read_folders_file_lenient(&path),
+        Err(_) => Vec::new(),
     }
-    let content = fs::read_to_string(path).map_err(|e| e.to_string())?;
-    serde_json::from_str(&content).map_err(|e| e.to_string())
 }
 
 fn write_folders<R: Runtime>(
     app: &AppHandle<R>,
-    folders: &Vec<SavedQueryFolder>,
+    folders: &[SavedQueryFolder],
 ) -> Result<(), String> {
-    let path = get_folders_path(app)?;
-    let content = serde_json::to_string_pretty(folders).map_err(|e| e.to_string())?;
-    fs::write(path, content).map_err(|e| e.to_string())
+    saved_query_folders::write_folders_file(&get_folders_path(app)?, folders)
 }
 
 #[tauri::command]
@@ -98,7 +102,7 @@ pub async fn get_saved_queries<R: Runtime>(
     connection_id: String,
 ) -> Result<Vec<SavedQuery>, String> {
     let meta_list = read_meta(&app)?;
-    let folders = read_folders(&app)?;
+    let folders = read_folders_or_empty(&app);
     let dir = get_queries_dir(&app)?;
 
     let mut results = Vec::new();
@@ -183,7 +187,7 @@ pub async fn update_saved_query<R: Runtime>(
     database: Option<String>,
 ) -> Result<SavedQuery, String> {
     let mut meta_list = read_meta(&app)?;
-    let folders = read_folders(&app)?;
+    let folders = read_folders_or_empty(&app);
     let dir = get_queries_dir(&app)?;
 
     let idx = meta_list

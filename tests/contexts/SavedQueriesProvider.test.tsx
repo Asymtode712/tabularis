@@ -252,6 +252,18 @@ describe('SavedQueriesProvider', () => {
       expect(invoke).toHaveBeenCalledWith('get_saved_query_folders', { connectionId: 'conn-123' });
     });
 
+    it('still loads queries, unfiled, when folders fail to load', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const { result } = await setup({
+        queries: mockQueries,
+        fail: { get_saved_query_folders: new Error('corrupt folders.json') },
+      });
+
+      expect(result.current.queries).toHaveLength(2);
+      expect(result.current.folders).toEqual([]);
+      consoleSpy.mockRestore();
+    });
+
     it('clears folders when disconnected', async () => {
       vi.mocked(useDatabase).mockReturnValue({ activeConnectionId: null } as ReturnType<typeof useDatabase>);
       const { result } = await setup({ folders: [folder] });

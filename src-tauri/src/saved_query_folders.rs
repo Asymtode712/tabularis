@@ -5,8 +5,11 @@
 //! `SavedQueryMeta::folder_id`, and `None` means "Unfiled".
 
 use serde::{Deserialize, Serialize};
+use std::fs;
+use std::path::Path;
 use uuid::Uuid;
 
+use crate::query_history::atomic_write;
 use crate::saved_queries::SavedQueryMeta;
 
 /// Maximum folder name length in characters, mirrored by `maxLength` on the
@@ -148,4 +151,35 @@ pub fn resolve_folder_id(meta: &SavedQueryMeta, folders: &[SavedQueryFolder]) ->
         .iter()
         .find(|f| f.id == id && f.connection_id == meta.connection_id)
         .map(|f| f.id.clone())
+}
+
+/// Reads `folders.json`. A missing file is an empty list; unreadable or
+/// invalid content is an error.
+pub fn read_folders_file(path: &Path) -> Result<Vec<SavedQueryFolder>, String> {
+    if !path.exists() {
+        return Ok(Vec::new());
+    }
+    let content = fs::read_to_string(path).map_err(|e| e.to_string())?;
+    serde_json::from_str(&content).map_err(|e| e.to_string())
+}
+
+/// Like `read_folders_file`, but a corrupt or unreadable file degrades to no
+/// folders (queries show as Unfiled) so organizational metadata can never hide
+/// or block saved queries. The file is left untouched for manual recovery.
+pub fn read_folders_file_lenient(path: &Path) -> Vec<SavedQueryFolder> {
+    read_folders_file(path).unwrap_or_else(|e| {
+        log::warn!(
+            "Ignoring unreadable saved-query folders file {}: {}",
+            path.display(),
+            e
+        );
+        Vec::new()
+    })
+}
+
+/// Writes `folders.json` through a temp file and rename so a crash mid-write
+/// cannot leave a truncated file.
+pub fn write_folders_file(path: &Path, folders: &[SavedQueryFolder]) -> Result<(), String> {
+    let content = serde_json::to_string_pretty(folders).map_err(|e| e.to_string())?;
+    atomic_write(path, content.as_bytes())
 }
