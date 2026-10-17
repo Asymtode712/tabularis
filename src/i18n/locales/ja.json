@@ -2069,7 +2069,9 @@
     "placeholder": "JSON を入力...",
     "format": "整形",
     "valid": "有効な JSON",
-    "invalid": "無効な JSON"
+    "invalid": "無効な JSON",
+    "expandAll": "すべて展開",
+    "collapseAll": "すべて折りたたむ"
   },
   "rowEditor": {
     "title": "行を編集",
@@ -2083,8 +2085,6 @@
   "rightSidebar": {
     "resize": "サイズ変更",
     "collapse": "折りたたむ",
-    "expandAll": "すべて展開",
-    "collapseAll": "すべて折りたたむ",
     "expand": "展開する"
   },
   "contextMenu": {

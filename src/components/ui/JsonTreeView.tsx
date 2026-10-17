@@ -237,21 +237,21 @@ export const JsonTreeView = ({
     return (
       <div className="flex flex-col gap-2 h-full min-h-0">
         <div className="flex items-center gap-2 flex-shrink-0">
-        {!externalSearchProvided && (
-          <div className="flex flex-1 items-center gap-2 bg-base border border-strong rounded px-2 py-1.5 focus-within:border-focus transition-colors">
-            <Search size={14} className="text-muted shrink-0" />
-            <input autoCorrect="off" autoCapitalize="off" autoComplete="off"
-              type="text"
-              role="searchbox"
-              value={internalSearch}
-              onChange={(e) => setInternalSearch(e.target.value)}
-              placeholder={t("jsonInput.search")}
-              spellCheck={false}
-              className="w-full bg-transparent border-none text-sm text-primary focus:outline-none placeholder:text-muted"
-            />
-          </div>
-        )}
-        {controls}
+          {!externalSearchProvided && (
+            <div className="flex flex-1 items-center gap-2 bg-base border border-strong rounded px-2 py-1.5 focus-within:border-focus transition-colors">
+              <Search size={14} className="text-muted shrink-0" />
+              <input autoCorrect="off" autoCapitalize="off" autoComplete="off"
+                type="text"
+                role="searchbox"
+                value={internalSearch}
+                onChange={(e) => setInternalSearch(e.target.value)}
+                placeholder={t("jsonInput.search")}
+                spellCheck={false}
+                className="w-full bg-transparent border-none text-sm text-primary focus:outline-none placeholder:text-muted"
+              />
+            </div>
+          )}
+          {controls}
         </div>
         <div className="flex-1 min-h-0 overflow-auto bg-base border border-strong rounded px-3 py-2">
           <JsonEditor
@@ -291,21 +291,21 @@ export const JsonTreeView = ({
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-2">
-      {!externalSearchProvided && (
-        <div className="flex flex-1 items-center gap-2 bg-base border border-strong rounded px-2 py-1.5 focus-within:border-focus transition-colors">
-          <Search size={14} className="text-muted shrink-0" />
-          <input autoCorrect="off" autoCapitalize="off" autoComplete="off"
-            type="text"
-            role="searchbox"
-            value={internalSearch}
-            onChange={(e) => setInternalSearch(e.target.value)}
-            placeholder={t("jsonInput.search")}
-            spellCheck={false}
-            className="w-full bg-transparent border-none text-sm text-primary focus:outline-none placeholder:text-muted"
-          />
-        </div>
-      )}
-      {controls}
+        {!externalSearchProvided && (
+          <div className="flex flex-1 items-center gap-2 bg-base border border-strong rounded px-2 py-1.5 focus-within:border-focus transition-colors">
+            <Search size={14} className="text-muted shrink-0" />
+            <input autoCorrect="off" autoCapitalize="off" autoComplete="off"
+              type="text"
+              role="searchbox"
+              value={internalSearch}
+              onChange={(e) => setInternalSearch(e.target.value)}
+              placeholder={t("jsonInput.search")}
+              spellCheck={false}
+              className="w-full bg-transparent border-none text-sm text-primary focus:outline-none placeholder:text-muted"
+            />
+          </div>
+        )}
+        {controls}
       </div>
       <div className="max-h-[280px] overflow-auto bg-base border border-strong rounded [overflow-wrap:anywhere] [&_*]:!max-w-full">
         <JsonEditor
