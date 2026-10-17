@@ -2083,6 +2083,8 @@
   "rightSidebar": {
     "resize": "サイズ変更",
     "collapse": "折りたたむ",
+    "expandAll": "すべて展開",
+    "collapseAll": "すべて折りたたむ",
     "expand": "展開する"
   },
   "contextMenu": {
