@@ -9,12 +9,7 @@ export function SqlMatchExcerpt({ excerpt }: SqlMatchExcerptProps) {
 
   return (
     <div
-      className="text-[11px] leading-[1.4] font-mono text-secondary whitespace-pre-wrap break-all overflow-hidden"
-      style={{
-        display: "-webkit-box",
-        WebkitLineClamp: 2,
-        WebkitBoxOrient: "vertical",
-      }}
+      className="text-[11px] leading-[1.4] font-mono text-secondary whitespace-pre-wrap break-all overflow-hidden line-clamp-2"
     >
       {truncatedStart && "…"}
       {before}
