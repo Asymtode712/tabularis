@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { copyTextToClipboard } from "../../utils/clipboard";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { quoteIdentifier, quoteTableRef } from "../../utils/identifiers";
+import { quoteIdentifier } from "../../utils/identifiers";
+import { buildDropTableSql } from "../../utils/dropTable";
 import { formatObjectNameForCopy, type ObjectNameCopyFormat } from "../../utils/objectNameCopy";
 import { isPostgresDriver, triggerFunctionName } from "../../utils/triggerSql";
 import { invoke } from "@tauri-apps/api/core";
@@ -46,11 +47,12 @@ import {
   Pencil,
   FolderInput,
 } from "lucide-react";
-import { ask, open } from "@tauri-apps/plugin-dialog";
+import { ask, open, save as saveFileDialog } from "@tauri-apps/plugin-dialog";
 import { toErrorMessage } from "../../utils/errors";
 import { useAlert } from "../../hooks/useAlert";
 import { useToast } from "../../hooks/useToast";
 import { getSavedQueryCopyName } from "../../utils/savedQueryNames";
+import { getSavedQueryExportFileName } from "../../utils/sqlFile";
 import { useEscapeKey } from "../../hooks/useEscapeKey";
 import { useSettings } from "../../hooks/useSettings";
 import { useDatabase } from "../../hooks/useDatabase";
@@ -213,6 +215,8 @@ export const ExplorerSidebar = ({ sidebarWidth, startResize, onCollapse, sidebar
   const {
     entries: historyEntries,
     isLoading: isHistoryLoading,
+    isPaused: isHistoryPaused,
+    togglePaused: toggleHistoryPaused,
     deleteEntry: deleteHistoryEntry,
     clearHistory,
     recoveryNotice: historyRecoveryNotice,
@@ -1227,6 +1231,8 @@ export const ExplorerSidebar = ({ sidebarWidth, startResize, onCollapse, sidebar
             <div className="animate-fade-in"><QueryHistorySection
               entries={historyEntries}
               isLoading={isHistoryLoading}
+              isPaused={isHistoryPaused}
+              onTogglePaused={toggleHistoryPaused}
               recoveryNotice={historyRecoveryNotice}
               onDismissRecoveryNotice={dismissHistoryRecoveryNotice}
               onDoubleClick={(entry) => {
@@ -2475,7 +2481,6 @@ export const ExplorerSidebar = ({ sidebarWidth, startResize, onCollapse, sidebar
                       icon: Trash2,
                       danger: true,
                       action: async () => {
-                        const quotedTable = quoteTableRef(contextMenu.id, activeCapabilities ?? activeDriver, ctxSchema);
                         if (
                           await ask(
                             t("sidebar.deleteTableConfirm", { table: contextMenu.id }),
@@ -2483,9 +2488,22 @@ export const ExplorerSidebar = ({ sidebarWidth, startResize, onCollapse, sidebar
                           )
                         ) {
                           try {
+                            const dropSql = await buildDropTableSql(
+                              activeCapabilities,
+                              () =>
+                                invoke<unknown>("get_drop_table_sql", {
+                                  connectionId: activeConnectionId,
+                                  table: contextMenu.id,
+                                  ...(ctxSchema ? { schema: ctxSchema } : {}),
+                                  ...(ctxDatabase ? { database: ctxDatabase } : {}),
+                                }),
+                              contextMenu.id,
+                              activeCapabilities ?? activeDriver,
+                              ctxSchema,
+                            );
                             await invoke("execute_query", {
                               connectionId: activeConnectionId,
-                              query: `DROP TABLE ${quotedTable}`,
+                              query: dropSql,
                               ...(ctxSchema ? { schema: ctxSchema } : {}),
                               ...(ctxDatabase ? { database: ctxDatabase } : {}),
                             });
@@ -3102,6 +3120,30 @@ export const ExplorerSidebar = ({ sidebarWidth, startResize, onCollapse, sidebar
                                 },
                               },
                               {
+                                label: t("sidebar.exportAsSql"),
+                                icon: Download,
+                                action: async () => {
+                                  if (!contextMenu.data || !("sql" in contextMenu.data)) return;
+                                  const sq = contextMenu.data as SavedQuery;
+                                  try {
+                                    const filePath = await saveFileDialog({
+                                      defaultPath: getSavedQueryExportFileName(sq.name),
+                                      filters: [
+                                        {
+                                          name: t("editor.sqlFileFilter"),
+                                          extensions: ["sql", "psql", "pgsql"],
+                                        },
+                                      ],
+                                    });
+                                    if (typeof filePath !== "string") return;
+                                    await invoke("write_sql_file", { path: filePath, content: sq.sql });
+                                    showToast(t("editor.sqlFileSaved"), { kind: "success" });
+                                  } catch (error) {
+                                    showToast(`${t("common.error")}: ${toErrorMessage(error)}`, { kind: "error" });
+                                  }
+                                },
+                              },
+                              {
                                 label: t("connections.duplicate"),
                                 icon: Copy,
                                 action: async () => {
@@ -3357,7 +3399,7 @@ export const ExplorerSidebar = ({ sidebarWidth, startResize, onCollapse, sidebar
       <ConfirmModal
         isOpen={folderDeleteConfirm !== null}
         onClose={() => setFolderDeleteConfirm(null)}
-        title={t("sidebar.confirmDeleteTitle")}
+        title={t("sidebar.confirmDeleteFolderTitle")}
         message={t("sidebar.confirmDeleteFolder", { name: folderDeleteConfirm?.name ?? "" })}
         onConfirm={async () => {
           const target = folderDeleteConfirm;

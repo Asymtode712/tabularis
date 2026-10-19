@@ -71,6 +71,8 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  ArrowLeft,
+  ArrowRight,
   ArrowLeftToLine,
   ArrowRightToLine,
   XCircle,
@@ -122,6 +124,9 @@ import {
   type ExportStatus,
 } from "../components/modals/ExportProgressModal";
 import { splitQueries, splitStatements, splitBatches, findStatementAtOffset, extractTableName, getExplainableQueries, statementLabel, type Statement } from "../utils/sql";
+import type { DialectInput } from "../utils/sqlSplitter";
+import { resolveSqlSyntax } from "../utils/sqlSyntax";
+import { canStripSqlComments, stripSqlComments } from "../utils/stripSqlComments";
 import { resolveRunTarget, type RunContext } from "../utils/runTarget";
 import {
   createResultEntries,
@@ -203,6 +208,7 @@ import {
   type ColumnStatsSupport,
 } from "../utils/columnStats";
 import { getNextSortClause } from "../utils/tableToolbar";
+import { getAdjacentTabGap } from "../utils/tabDnd";
 import {
   createSqlFileTab,
   getSqlFileName,
@@ -231,7 +237,7 @@ const CHEVRON_SELECT_STYLE: React.CSSProperties = {
 };
 
 // Execution units: one per `GO` batch on T-SQL, one per statement elsewhere.
-function splitBatchQueries(sql: string, dialect: string | undefined): string[] {
+function splitBatchQueries(sql: string, dialect: DialectInput): string[] {
   return splitBatches(sql, dialect).map((statement) => statement.text);
 }
 
@@ -239,7 +245,7 @@ function splitBatchQueries(sql: string, dialect: string | undefined): string[] {
 // "run statement at cursor"), used by both the Run and Explain actions.
 function getStatementAtCursor(
   editor: Parameters<OnMount>[0],
-  dialect: string | undefined,
+  dialect: DialectInput,
   split = splitBatches,
 ): Statement | undefined {
   const model = editor.getModel();
@@ -302,7 +308,10 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
 
   const driverReadonly = isReadonly(activeCapabilities);
   const driverSupportsExplain = supportsExplain(activeCapabilities);
-  const activeDialect = activeCapabilities?.sql_dialect;
+  // The connection's resolved SQL syntax (`sql_dialect` preset plus any
+  // declared `sql_syntax`), passed wherever a dialect is needed. Cached per
+  // capabilities, so it is as stable as the dialect string it replaces.
+  const activeDialect = resolveSqlSyntax(activeCapabilities);
 
   // Editor panes stay mounted (hidden with display:none) so Monaco never
   // remounts. Render them sorted by id, decoupled from the tab-strip order:
@@ -684,8 +693,11 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
     [activeTab?.activeResultId, activeTab?.results],
   );
   const activeExportResult = activeResultEntry?.result ?? activeTab?.result;
+  // A header-only grid can still be saved as HTML. CSV, JSON and Markdown
+  // stay disabled then: with no loaded rows those actions re-run the query.
+  const hasLoadedExportRows = (activeExportResult?.rows.length ?? 0) > 0;
   const canExportActiveResult =
-    !!activeExportResult && activeExportResult.rows.length > 0;
+    hasLoadedExportRows || (activeExportResult?.columns.length ?? 0) > 0;
 
   const activeTabFlatDatabase = isMultiDb
     ? resolveFlatMultiDbTabDatabase(activeTab, selectedDatabases)
@@ -768,6 +780,9 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
   const runMultipleQueriesRef = useRef<typeof runMultipleQueries>(null!);
   const openExplainForQueryRef = useRef<(query: string) => void>(null!);
   const activeDialectRef = useRef<typeof activeDialect>(undefined);
+  // Per-editor Monaco context keys that gate the Copy SQL Without Comments
+  // action, so it is hidden where the connection declares no SQL dialect.
+  const stripCommentsKeysRef = useRef<Map<string, { set(value: boolean): void }>>(new Map());
   const supportsExplainRef = useRef(false);
   const tabScrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -2204,10 +2219,11 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
         csvIncludeHeaders,
         csvDelimiter,
         tableName,
+        driver: activeCapabilities,
       });
       return { text, count: res.rows.length };
     },
-    [activeConnectionId, copyFormat, csvDelimiter, csvIncludeHeaders],
+    [activeConnectionId, activeCapabilities, copyFormat, csvDelimiter, csvIncludeHeaders],
   );
 
   // Schema resolution mirrors runQuery so the full fetch targets the same
@@ -2726,6 +2742,11 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
   runMultipleQueriesRef.current = runMultipleQueries;
   openExplainForQueryRef.current = openExplainForQuery;
   activeDialectRef.current = activeDialect;
+
+  useEffect(() => {
+    const canStrip = canStripSqlComments(activeDialect);
+    for (const key of stripCommentsKeysRef.current.values()) key.set(canStrip);
+  }, [activeDialect]);
   supportsExplainRef.current = driverSupportsExplain;
 
   // Global Ctrl/Command+F5 shortcut for Run (+Shift for Run All)
@@ -2996,6 +3017,16 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
     ],
   );
 
+  // Filtering by a value from the grid (e.g. a top value in the column
+  // statistics popover) remounts the grid: its key includes the filter, and
+  // the loading state replaces it until the rows arrive. Focus drops to
+  // <body> on the way, so the grid showing the new rows takes it back
+  // (issue #1138). `staleResult` is the result the filter was picked from.
+  const gridFocusRequestRef = useRef<{
+    tabId: string;
+    staleResult: QueryResult | null | undefined;
+  } | null>(null);
+
   const handleFilterByValue = useCallback(
     (
       column: string,
@@ -3007,6 +3038,10 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
         (tb) => tb.id === activeTabIdRef.current,
       );
       if (!currentTab) return;
+      gridFocusRequestRef.current = {
+        tabId: currentTab.id,
+        staleResult: currentTab.result,
+      };
 
       const sourceType =
         columnType ||
@@ -3026,6 +3061,28 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
     },
     [activeDriver, activeCapabilities, handleToolbarUpdate],
   );
+
+  const activeResult = activeTab?.result;
+  const activeIsLoading = !!activeTab?.isLoading;
+  useEffect(() => {
+    const request = gridFocusRequestRef.current;
+    if (!request) return;
+    if (request.tabId !== activeTabId) {
+      gridFocusRequestRef.current = null;
+      return;
+    }
+    // Wait for the filtered rows: the grid also remounts as soon as the
+    // filter changes, still showing the old ones, before the loading state.
+    if (activeIsLoading || !activeResult || activeResult === request.staleResult) {
+      return;
+    }
+    gridFocusRequestRef.current = null;
+    // Leave focus alone if the user moved it while the query ran.
+    const focused = document.activeElement;
+    if (!focused || focused === document.body) {
+      dataGridCommandTargetRef.current?.focus();
+    }
+  }, [activeTabId, activeResult, activeIsLoading]);
 
   // Column statistics popover (issue #1001): counts the rows matching the
   // tab's current filter, like the row count does (sort and LIMIT ignored).
@@ -4061,6 +4118,32 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
         }
       },
     });
+    stripCommentsKeysRef.current.set(
+      tabId,
+      editor.createContextKey(
+        "tabularisCanStripSqlComments",
+        canStripSqlComments(activeDialectRef.current),
+      ),
+    );
+    editor.onDidDispose(() => stripCommentsKeysRef.current.delete(tabId));
+    editor.addAction({
+      id: "copy-sql-without-comments",
+      label: t("editor.copyWithoutComments"),
+      precondition: "tabularisCanStripSqlComments",
+      contextMenuGroupId: "9_cutcopypaste",
+      contextMenuOrder: 3,
+      run: (ed) => {
+        const selection = ed.getSelection();
+        const model = ed.getModel();
+        const source =
+          selection && !selection.isEmpty()
+            ? model?.getValueInRange(selection)
+            : ed.getValue();
+        if (!source) return;
+        const stripped = stripSqlComments(source, activeDialectRef.current);
+        void copyTextToClipboard(stripped);
+      },
+    });
   };
 
   useSqlAutocompleteRegistration(activeConnectionId, {
@@ -4343,6 +4426,57 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
   const handleExportCSV = () => handleExportCommon("csv");
   const handleExportJSON = () => handleExportCommon("json");
   const handleExportMarkdown = () => handleExportCommon("markdown");
+
+  // Writes the grid already on screen. Never calls the streaming exporter.
+  const handleExportHtml = async () => {
+    if (!activeTab || !activeConnectionId || !activeExportResult) return;
+
+    try {
+      const loadedRowsLimit = getLoadedRowsExportLimit(activeExportResult);
+      const warningMessage = loadedRowsLimit
+        ? t("editor.exportLoadedRowsWarning", {
+            loaded: loadedRowsLimit.loadedRows.toLocaleString(),
+            total: loadedRowsLimit.totalRows.toLocaleString(),
+          })
+        : undefined;
+
+      const filePath = await saveFileDialog({
+        filters: [{ name: "HTML", extensions: ["html"] }],
+        defaultPath: buildExportFileName({
+          tableName: activeTab.type === "table" ? activeTab.activeTable : null,
+          extension: "html",
+        }),
+      });
+
+      if (!filePath) return;
+
+      setExportState({
+        isOpen: true,
+        status: "exporting",
+        rowsProcessed: activeExportResult.rows.length,
+        fileName: filePath.split(/[/\\]/).pop() || filePath,
+        errorMessage: undefined,
+        warningMessage,
+      });
+      setExportMenuOpen(false);
+
+      await writeTextFile(
+        filePath,
+        formatResultForExport(activeExportResult, "html"),
+      );
+
+      setExportState((prev) => ({
+        ...prev,
+        status: "completed",
+      }));
+    } catch (e) {
+      setExportState((prev) => ({
+        ...prev,
+        status: "error",
+        errorMessage: String(e),
+      }));
+    }
+  };
 
   const handleRunDropdownToggle = useCallback(() => {
     if (!isRunDropdownOpen) {
@@ -4963,34 +5097,50 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
           {exportMenuOpen && (
             <div
               role="menu"
-              className="absolute top-full right-0 mt-1 w-44 max-w-[calc(100cqw-1rem)] bg-elevated border border-strong rounded-md shadow-xl z-50 flex flex-col py-1 overflow-hidden"
+              className="absolute top-full right-0 mt-1 min-w-44 w-max max-w-[calc(100cqw-1rem)] bg-elevated border border-strong rounded-md shadow-xl z-50 flex flex-col py-1 overflow-hidden"
             >
               <button
+                type="button"
                 role="menuitem"
                 onClick={handleExportCSV}
-                className="flex items-center gap-2.5 text-left px-3 py-2 text-sm text-secondary hover:bg-accent-primary/15 hover:text-accent transition-colors"
+                disabled={!hasLoadedExportRows}
+                className="flex items-center gap-2.5 text-left px-3 py-2 text-sm text-secondary enabled:hover:bg-accent-primary/15 enabled:hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FileText size={14} className="shrink-0 opacity-80" />
                 <span className="flex-1">CSV</span>
                 <span className="text-xs text-muted">.csv</span>
               </button>
               <button
+                type="button"
                 role="menuitem"
                 onClick={handleExportJSON}
-                className="flex items-center gap-2.5 text-left px-3 py-2 text-sm text-secondary hover:bg-accent-primary/15 hover:text-accent transition-colors"
+                disabled={!hasLoadedExportRows}
+                className="flex items-center gap-2.5 text-left px-3 py-2 text-sm text-secondary enabled:hover:bg-accent-primary/15 enabled:hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FileJson size={14} className="shrink-0 opacity-80" />
                 <span className="flex-1">JSON</span>
                 <span className="text-xs text-muted">.json</span>
               </button>
               <button
+                type="button"
                 role="menuitem"
                 onClick={handleExportMarkdown}
-                className="flex items-center gap-2.5 text-left px-3 py-2 text-sm text-secondary hover:bg-accent-primary/15 hover:text-accent transition-colors"
+                disabled={!hasLoadedExportRows}
+                className="flex items-center gap-2.5 text-left px-3 py-2 text-sm text-secondary enabled:hover:bg-accent-primary/15 enabled:hover:text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <FileText size={14} className="shrink-0 opacity-80" />
                 <span className="flex-1">Markdown</span>
                 <span className="text-xs text-muted">.md</span>
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                onClick={handleExportHtml}
+                className="flex items-center gap-2.5 text-left px-3 py-2 text-sm text-secondary hover:bg-accent-primary/15 hover:text-accent transition-colors whitespace-nowrap focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
+              >
+                <FileCode size={14} className="shrink-0 opacity-80" />
+                <span className="flex-1">{t("editor.exportLoadedHtml")}</span>
+                <span className="text-xs text-muted">.html</span>
               </button>
             </div>
           )}
@@ -5993,6 +6143,12 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
       />
       {tabContextMenu && (() => {
         const contextTab = tabs.find((t) => t.id === tabContextMenu.tabId);
+        const moveGap = (direction: "left" | "right") =>
+          contextTab
+            ? getAdjacentTabGap(tabs, contextTab.connectionId, contextTab.id, direction)
+            : null;
+        const leftGap = moveGap("left");
+        const rightGap = moveGap("right");
         return (
         <ContextMenu
           x={tabContextMenu.x}
@@ -6050,6 +6206,24 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
               disabled: !canReopenClosedTab,
               action: () => reopenClosedTab(),
             },
+            { separator: true },
+            {
+              label: t("editor.moveTabLeft"),
+              icon: ArrowLeft,
+              disabled: leftGap === null,
+              action: () => {
+                if (leftGap !== null) reorderTab(tabContextMenu.tabId, leftGap);
+              },
+            },
+            {
+              label: t("editor.moveTabRight"),
+              icon: ArrowRight,
+              disabled: rightGap === null,
+              action: () => {
+                if (rightGap !== null) reorderTab(tabContextMenu.tabId, rightGap);
+              },
+            },
+            { separator: true },
             {
               label: t("editor.closeTab"),
               icon: X,

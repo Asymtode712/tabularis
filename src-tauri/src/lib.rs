@@ -3,6 +3,8 @@ pub mod chatgpt;
 pub mod ai_activity;
 #[cfg(test)]
 pub mod ai_activity_tests;
+#[cfg(test)]
+pub mod ai_activity_lexer_tests;
 pub mod ai_approval;
 #[cfg(test)]
 pub mod ai_approval_tests;
@@ -81,6 +83,7 @@ pub mod storage_location_tests;
 pub mod persistence;
 #[cfg(test)]
 pub mod persistence_tests;
+pub mod plugin_secrets;
 pub mod plugins;
 pub mod pool_manager;
 #[cfg(test)]
@@ -126,6 +129,12 @@ pub mod drivers {
     pub mod mysql;
     pub mod postgres;
     pub mod registry;
+    pub mod sql_dialect;
+    #[cfg(test)]
+    pub mod sql_dialect_tests;
+    pub mod sql_syntax;
+    #[cfg(test)]
+    pub mod sql_syntax_tests;
     pub mod sqlite;
 }
 
@@ -700,6 +709,7 @@ pub fn run() {
             commands::get_alter_column_sql,
             commands::get_create_index_sql,
             commands::get_create_foreign_key_sql,
+            commands::get_drop_table_sql,
             commands::drop_index_action,
             commands::drop_foreign_key_action,
             // Routines
