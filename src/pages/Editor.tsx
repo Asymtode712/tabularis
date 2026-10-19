@@ -4710,6 +4710,18 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
     setExportState((prev) => ({ ...prev, isOpen: false }));
   }, []);
 
+  const getLoadedRowsWarning = (result: QueryResult): string | undefined => {
+    const limit = getLoadedRowsExportLimit(result);
+    if (!limit) return undefined;
+    const loaded = limit.loadedRows.toLocaleString();
+    return limit.totalRows === null
+      ? t("editor.exportLoadedRowsWarningUnknownTotal", { loaded })
+      : t("editor.exportLoadedRowsWarning", {
+          loaded,
+          total: limit.totalRows.toLocaleString(),
+        });
+  };
+
   const handleExportLoadedRows = async (
     result: QueryResult,
     format: ResultExportFormat,
@@ -4720,13 +4732,7 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
     const filterName =
       format === "markdown" ? "Markdown" : format.toUpperCase();
     try {
-      const loadedRowsLimit = getLoadedRowsExportLimit(result);
-      const warningMessage = loadedRowsLimit
-        ? t("editor.exportLoadedRowsWarning", {
-            loaded: loadedRowsLimit.loadedRows.toLocaleString(),
-            total: loadedRowsLimit.totalRows.toLocaleString(),
-          })
-        : undefined;
+      const warningMessage = getLoadedRowsWarning(result);
 
       const filePath = await saveFileDialog({
         filters: [
@@ -4875,13 +4881,7 @@ export const Editor = ({ commandScopeId }: EditorProps) => {
     if (!activeTab || !activeConnectionId || !activeExportResult) return;
 
     try {
-      const loadedRowsLimit = getLoadedRowsExportLimit(activeExportResult);
-      const warningMessage = loadedRowsLimit
-        ? t("editor.exportLoadedRowsWarning", {
-            loaded: loadedRowsLimit.loadedRows.toLocaleString(),
-            total: loadedRowsLimit.totalRows.toLocaleString(),
-          })
-        : undefined;
+      const warningMessage = getLoadedRowsWarning(activeExportResult);
 
       const filePath = await saveFileDialog({
         filters: [{ name: "HTML", extensions: ["html"] }],
