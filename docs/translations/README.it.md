@@ -1,7 +1,7 @@
 <br />
 <p align="center">
-  <img src=".github/assets/banner-light.it.png#gh-light-mode-only" alt="Tabularis" width="100%">
-  <img src=".github/assets/banner-dark.it.png#gh-dark-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-light.it.png#gh-light-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-dark.it.png#gh-dark-mode-only" alt="Tabularis" width="100%">
 </p>
 
 # Tabularis
@@ -12,7 +12,7 @@ Tabularis è un workspace SQL desktop open source con 3 driver di database integ
   <b><a href="https://tabularis.dev">Sito web</a></b> ·
   <b><a href="https://tabularis.dev/wiki">Documentazione</a></b> ·
   <b><a href="https://tabularis.dev/download">Download</a></b> ·
-  <b><a href="./CHANGELOG.md">Changelog</a></b>
+  <b><a href="../../CHANGELOG.md">Changelog</a></b>
 </p>
 
 <br />
@@ -37,7 +37,7 @@ Tabularis è un workspace SQL desktop open source con 3 driver di database integ
 
 <p align="center">
   <sub>
-    <a href="./README.md">English</a> ·
+    <a href="../../README.md">English</a> ·
     <a href="./README.it.md">Italiano</a> ·
     <a href="./README.es.md">Español</a> ·
     <a href="./README.zh-CN.md">中文</a> ·
@@ -52,7 +52,7 @@ Tabularis è un workspace SQL desktop open source con 3 driver di database integ
 </p>
 
 > [!NOTE]
-> Documento tradotto. Per la versione di riferimento sempre aggiornata, consulta il [README in inglese](./README.md).
+> Documento tradotto. Per la versione di riferimento sempre aggiornata, consulta il [README in inglese](../../README.md).
 
 <br />
 
@@ -70,11 +70,11 @@ sudo snap install tabularis       # Linux
 
 Oppure scarica direttamente un installer:
 
-- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64-setup.exe)
+- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64-setup.exe)
 
-- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64.dmg)
+- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64.dmg)
 
-- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis-0.28.0-1.x86_64.rpm)
+- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis-0.29.0-1.x86_64.rpm)
 
 L’interfaccia dell’app è disponibile in inglese, italiano, spagnolo, cinese (semplificato), francese, tedesco, giapponese, russo, coreano, tagalog e portoghese (brasiliano).
 
@@ -282,8 +282,8 @@ La galleria completa è disponibile su [tabularis.dev](https://tabularis.dev).
 
 - Sistema plugin esterno via JSON-RPC 2.0 su stdin/stdout.
 - Installazione driver comunitari senza riavvio.
-- Registro ufficiale in [`plugins/registry.json`](./plugins/registry.json).
-- Guida sviluppo in [`plugins/PLUGIN_GUIDE.md`](./plugins/PLUGIN_GUIDE.md).
+- Registro ufficiale in [`plugins/registry.json`](../../plugins/registry.json).
+- Guida sviluppo in [`plugins/PLUGIN_GUIDE.md`](../../plugins/PLUGIN_GUIDE.md).
 
 ## Configurazione
 
@@ -372,18 +372,18 @@ pnpm tauri build
 
 ## Roadmap
 
-La roadmap viene generata automaticamente dalle issue di GitHub. Consulta lo stato attuale nel [README in inglese](./README.md#roadmap).
+La roadmap viene generata automaticamente dalle issue di GitHub. Consulta lo stato attuale nel [README in inglese](../../README.md#roadmap).
 
 ## Contribuire
 
-I contributi sono benvenuti, consulta [CONTRIBUTING.md](./CONTRIBUTING.md). Buoni punti di partenza:
+I contributi sono benvenuti, consulta [CONTRIBUTING.md](../../CONTRIBUTING.md). Buoni punti di partenza:
 
 - [Design system UI e identità visiva: ricerca contributor](https://github.com/TabularisDB/tabularis/issues/195)
-- Scrivi un plugin driver in qualsiasi linguaggio con la [Plugin Guide](./plugins/PLUGIN_GUIDE.md)
+- Scrivi un plugin driver in qualsiasi linguaggio con la [Plugin Guide](../../plugins/PLUGIN_GUIDE.md)
 
 ## Sponsor e sostenitori
 
-Tabularis è sostenuto da sponsor e sostenitori fantastici. Trovi l’elenco completo nel [README in inglese](./README.md#sponsors-and-supporters) e su [tabularis.dev/sponsors](https://tabularis.dev/sponsors).
+Tabularis è sostenuto da sponsor e sostenitori fantastici. Trovi l’elenco completo nel [README in inglese](../../README.md#sponsors-and-supporters) e su [tabularis.dev/sponsors](https://tabularis.dev/sponsors).
 
 ## Le origini del progetto
 
@@ -391,7 +391,7 @@ Tabularis è nato come esperimento: fino a che punto poteva arrivare lo sviluppo
 
 ## Licenza
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](../../LICENSE)
 
 ---
 

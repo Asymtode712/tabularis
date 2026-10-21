@@ -1,7 +1,7 @@
 <br />
 <p align="center">
-  <img src=".github/assets/banner-light.de.png#gh-light-mode-only" alt="Tabularis" width="100%">
-  <img src=".github/assets/banner-dark.de.png#gh-dark-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-light.de.png#gh-light-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-dark.de.png#gh-dark-mode-only" alt="Tabularis" width="100%">
 </p>
 
 # Tabularis
@@ -12,7 +12,7 @@ Tabularis ist ein quelloffener Desktop-SQL-Workspace mit 3 integrierten Datenban
   <b><a href="https://tabularis.dev">Website</a></b> ·
   <b><a href="https://tabularis.dev/wiki">Dokumentation</a></b> ·
   <b><a href="https://tabularis.dev/download">Download</a></b> ·
-  <b><a href="./CHANGELOG.md">Changelog</a></b>
+  <b><a href="../../CHANGELOG.md">Changelog</a></b>
 </p>
 
 <br />
@@ -37,7 +37,7 @@ Tabularis ist ein quelloffener Desktop-SQL-Workspace mit 3 integrierten Datenban
 
 <p align="center">
   <sub>
-    <a href="./README.md">English</a> ·
+    <a href="../../README.md">English</a> ·
     <a href="./README.it.md">Italiano</a> ·
     <a href="./README.es.md">Español</a> ·
     <a href="./README.zh-CN.md">中文</a> ·
@@ -52,7 +52,7 @@ Tabularis ist ein quelloffener Desktop-SQL-Workspace mit 3 integrierten Datenban
 </p>
 
 > [!NOTE]
-> Übersetztes Dokument. Für die maßgebliche und aktuellste Version siehe das [englische README](./README.md).
+> Übersetztes Dokument. Für die maßgebliche und aktuellste Version siehe das [englische README](../../README.md).
 
 <br />
 
@@ -70,11 +70,11 @@ sudo snap install tabularis       # Linux
 
 Oder lade direkt einen Installer herunter:
 
-- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64-setup.exe)
+- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64-setup.exe)
 
-- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64.dmg)
+- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64.dmg)
 
-- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis-0.28.0-1.x86_64.rpm)
+- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis-0.29.0-1.x86_64.rpm)
 
 Die Benutzeroberfläche der App ist auf Englisch, Italienisch, Spanisch, Chinesisch (vereinfacht), Französisch, Deutsch, Japanisch, Russisch, Koreanisch, Tagalog und brasilianischem Portugiesisch verfügbar.
 
@@ -282,8 +282,8 @@ Die vollständige Galerie findest du auf [tabularis.dev](https://tabularis.dev).
 
 - Externes Plugin-System über JSON-RPC 2.0 via stdin/stdout.
 - Community-Treiber ohne Neustart installierbar.
-- Offizielles Registry-File: [`plugins/registry.json`](./plugins/registry.json).
-- Entwicklerleitfaden: [`plugins/PLUGIN_GUIDE.md`](./plugins/PLUGIN_GUIDE.md).
+- Offizielles Registry-File: [`plugins/registry.json`](../../plugins/registry.json).
+- Entwicklerleitfaden: [`plugins/PLUGIN_GUIDE.md`](../../plugins/PLUGIN_GUIDE.md).
 
 ## Konfiguration
 
@@ -372,18 +372,18 @@ pnpm tauri build
 
 ## Roadmap
 
-Die Roadmap wird automatisch aus den GitHub-Issues erzeugt. Den aktuellen Stand findest du im [englischen README](./README.md#roadmap).
+Die Roadmap wird automatisch aus den GitHub-Issues erzeugt. Den aktuellen Stand findest du im [englischen README](../../README.md#roadmap).
 
 ## Mitwirken
 
-Beiträge sind willkommen, siehe [CONTRIBUTING.md](./CONTRIBUTING.md). Gute Einstiegspunkte:
+Beiträge sind willkommen, siehe [CONTRIBUTING.md](../../CONTRIBUTING.md). Gute Einstiegspunkte:
 
 - [UI-Designsystem & visuelle Identität: Aufruf an Mitwirkende](https://github.com/TabularisDB/tabularis/issues/195)
-- Schreibe ein Treiber-Plugin in einer beliebigen Sprache mit dem [Plugin Guide](./plugins/PLUGIN_GUIDE.md)
+- Schreibe ein Treiber-Plugin in einer beliebigen Sprache mit dem [Plugin Guide](../../plugins/PLUGIN_GUIDE.md)
 
 ## Sponsoren und Unterstützer
 
-Tabularis wird von großartigen Sponsoren und Unterstützern getragen. Die vollständige Liste findest du im [englischen README](./README.md#sponsors-and-supporters) und auf [tabularis.dev/sponsors](https://tabularis.dev/sponsors).
+Tabularis wird von großartigen Sponsoren und Unterstützern getragen. Die vollständige Liste findest du im [englischen README](../../README.md#sponsors-and-supporters) und auf [tabularis.dev/sponsors](https://tabularis.dev/sponsors).
 
 ## Entstehungsgeschichte
 
@@ -391,7 +391,7 @@ Tabularis begann als Experiment: Wie weit kommt KI-gestützte Entwicklung beim A
 
 ## Lizenz
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](../../LICENSE)
 
 ---
 

@@ -1,7 +1,7 @@
 <br />
 <p align="center">
-  <img src=".github/assets/banner-light.ja.png#gh-light-mode-only" alt="Tabularis" width="100%">
-  <img src=".github/assets/banner-dark.ja.png#gh-dark-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-light.ja.png#gh-light-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-dark.ja.png#gh-dark-mode-only" alt="Tabularis" width="100%">
 </p>
 
 # Tabularis
@@ -12,7 +12,7 @@ Tabularis は、3 つの標準搭載データベースドライバーと、DuckD
   <b><a href="https://tabularis.dev">ウェブサイト</a></b> ·
   <b><a href="https://tabularis.dev/wiki">ドキュメント</a></b> ·
   <b><a href="https://tabularis.dev/download">ダウンロード</a></b> ·
-  <b><a href="./CHANGELOG.md">変更履歴</a></b>
+  <b><a href="../../CHANGELOG.md">変更履歴</a></b>
 </p>
 
 <br />
@@ -37,7 +37,7 @@ Tabularis は、3 つの標準搭載データベースドライバーと、DuckD
 
 <p align="center">
   <sub>
-    <a href="./README.md">English</a> ·
+    <a href="../../README.md">English</a> ·
     <a href="./README.it.md">Italiano</a> ·
     <a href="./README.es.md">Español</a> ·
     <a href="./README.zh-CN.md">中文</a> ·
@@ -52,7 +52,7 @@ Tabularis は、3 つの標準搭載データベースドライバーと、DuckD
 </p>
 
 > [!NOTE]
-> これは翻訳版のドキュメントです。最新かつ正式な内容は [英語版 README](./README.md) を参照してください。
+> これは翻訳版のドキュメントです。最新かつ正式な内容は [英語版 README](../../README.md) を参照してください。
 
 <br />
 
@@ -70,11 +70,11 @@ sudo snap install tabularis       # Linux
 
 または、インストーラーを直接ダウンロードしてください。
 
-- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64-setup.exe)
+- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64-setup.exe)
 
-- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64.dmg)
+- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64.dmg)
 
-- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis-0.28.0-1.x86_64.rpm)
+- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis-0.29.0-1.x86_64.rpm)
 
 アプリの UI は英語、イタリア語、スペイン語、中国語（簡体字）、フランス語、ドイツ語、日本語、ロシア語、韓国語、タガログ語、ポルトガル語（ブラジル）に対応しています。
 
@@ -282,8 +282,8 @@ yay -S tabularis-bin
 
 - stdin/stdout 経由の JSON-RPC 2.0 による外部プラグインシステム。
 - コミュニティドライバーを再起動なしでインストール可能。
-- 公式レジストリ: [`plugins/registry.json`](./plugins/registry.json)。
-- 開発者ガイド: [`plugins/PLUGIN_GUIDE.md`](./plugins/PLUGIN_GUIDE.md)。
+- 公式レジストリ: [`plugins/registry.json`](../../plugins/registry.json)。
+- 開発者ガイド: [`plugins/PLUGIN_GUIDE.md`](../../plugins/PLUGIN_GUIDE.md)。
 
 ## 設定
 
@@ -372,18 +372,18 @@ pnpm tauri build
 
 ## ロードマップ
 
-ロードマップは GitHub の Issue から自動生成されます。最新の状況は[英語版 README](./README.md#roadmap) を参照してください。
+ロードマップは GitHub の Issue から自動生成されます。最新の状況は[英語版 README](../../README.md#roadmap) を参照してください。
 
 ## コントリビューション
 
-コントリビューションを歓迎します。詳しくは [CONTRIBUTING.md](./CONTRIBUTING.md) をご覧ください。始めやすいテーマは次のとおりです。
+コントリビューションを歓迎します。詳しくは [CONTRIBUTING.md](../../CONTRIBUTING.md) をご覧ください。始めやすいテーマは次のとおりです。
 
 - [UI デザインシステムとビジュアルアイデンティティ: コントリビューター募集](https://github.com/TabularisDB/tabularis/issues/195)
-- [プラグインガイド](./plugins/PLUGIN_GUIDE.md)を参考に、好きな言語でドライバープラグインを書く
+- [プラグインガイド](../../plugins/PLUGIN_GUIDE.md)を参考に、好きな言語でドライバープラグインを書く
 
 ## スポンサーとサポーター
 
-Tabularis は素晴らしいスポンサーとサポーターに支えられています。全リストは[英語版 README](./README.md#sponsors-and-supporters) と [tabularis.dev/sponsors](https://tabularis.dev/sponsors) で確認できます。
+Tabularis は素晴らしいスポンサーとサポーターに支えられています。全リストは[英語版 README](../../README.md#sponsors-and-supporters) と [tabularis.dev/sponsors](https://tabularis.dev/sponsors) で確認できます。
 
 ## プロジェクトの成り立ち
 
@@ -391,7 +391,7 @@ Tabularis は、AI 支援開発でゼロから動くツールをどこまで作�
 
 ## ライセンス
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](../../LICENSE)
 
 ---
 

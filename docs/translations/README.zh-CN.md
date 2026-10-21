@@ -1,7 +1,7 @@
 <br />
 <p align="center">
-  <img src=".github/assets/banner-light.zh-CN.png#gh-light-mode-only" alt="Tabularis" width="100%">
-  <img src=".github/assets/banner-dark.zh-CN.png#gh-dark-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-light.zh-CN.png#gh-light-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-dark.zh-CN.png#gh-dark-mode-only" alt="Tabularis" width="100%">
 </p>
 
 # Tabularis
@@ -12,7 +12,7 @@ Tabularis 是一款开源的桌面 SQL 工作台，内置 3 种数据库驱动�
   <b><a href="https://tabularis.dev">官网</a></b> ·
   <b><a href="https://tabularis.dev/wiki">文档</a></b> ·
   <b><a href="https://tabularis.dev/download">下载</a></b> ·
-  <b><a href="./CHANGELOG.md">更新日志</a></b>
+  <b><a href="../../CHANGELOG.md">更新日志</a></b>
 </p>
 
 <br />
@@ -37,7 +37,7 @@ Tabularis 是一款开源的桌面 SQL 工作台，内置 3 种数据库驱动�
 
 <p align="center">
   <sub>
-    <a href="./README.md">English</a> ·
+    <a href="../../README.md">English</a> ·
     <a href="./README.it.md">Italiano</a> ·
     <a href="./README.es.md">Español</a> ·
     <a href="./README.zh-CN.md">中文</a> ·
@@ -52,7 +52,7 @@ Tabularis 是一款开源的桌面 SQL 工作台，内置 3 种数据库驱动�
 </p>
 
 > [!NOTE]
-> 这是翻译版文档。若需最新且权威的说明，请参考[英文 README](./README.md)。
+> 这是翻译版文档。若需最新且权威的说明，请参考[英文 README](../../README.md)。
 
 <br />
 
@@ -70,11 +70,11 @@ sudo snap install tabularis       # Linux
 
 或直接下载安装包：
 
-- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64-setup.exe)
+- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64-setup.exe)
 
-- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64.dmg)
+- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64.dmg)
 
-- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis-0.28.0-1.x86_64.rpm)
+- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis-0.29.0-1.x86_64.rpm)
 
 应用界面支持英语、意大利语、西班牙语、简体中文、法语、德语、日语、俄语、韩语、他加禄语和巴西葡萄牙语。
 
@@ -282,8 +282,8 @@ yay -S tabularis-bin
 
 - 通过 stdin/stdout 上的 JSON-RPC 2.0 扩展应用。
 - 无需重启即可安装社区驱动。
-- 官方注册表位于 [`plugins/registry.json`](./plugins/registry.json)。
-- 开发指南位于 [`plugins/PLUGIN_GUIDE.md`](./plugins/PLUGIN_GUIDE.md)。
+- 官方注册表位于 [`plugins/registry.json`](../../plugins/registry.json)。
+- 开发指南位于 [`plugins/PLUGIN_GUIDE.md`](../../plugins/PLUGIN_GUIDE.md)。
 
 ## 配置
 
@@ -372,18 +372,18 @@ pnpm tauri build
 
 ## 路线图
 
-路线图根据 GitHub Issues 自动生成。最新状态请查看[英文 README](./README.md#roadmap)。
+路线图根据 GitHub Issues 自动生成。最新状态请查看[英文 README](../../README.md#roadmap)。
 
 ## 贡献
 
-欢迎贡献，请参阅 [CONTRIBUTING.md](./CONTRIBUTING.md)。不错的切入点：
+欢迎贡献，请参阅 [CONTRIBUTING.md](../../CONTRIBUTING.md)。不错的切入点：
 
 - [UI 设计系统与视觉识别：贡献者招募](https://github.com/TabularisDB/tabularis/issues/195)
-- 参阅[插件指南](./plugins/PLUGIN_GUIDE.md)，用任意语言编写驱动插件
+- 参阅[插件指南](../../plugins/PLUGIN_GUIDE.md)，用任意语言编写驱动插件
 
 ## 赞助商与支持者
 
-Tabularis 得到了许多优秀赞助者和支持者的支持。完整名单请查看[英文 README](./README.md#sponsors-and-supporters) 和 [tabularis.dev/sponsors](https://tabularis.dev/sponsors)。
+Tabularis 得到了许多优秀赞助者和支持者的支持。完整名单请查看[英文 README](../../README.md#sponsors-and-supporters) 和 [tabularis.dev/sponsors](https://tabularis.dev/sponsors)。
 
 ## 项目起源
 
@@ -391,7 +391,7 @@ Tabularis 始于一次实验：AI 辅助开发能在多大程度上从零构建�
 
 ## 许可证
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](../../LICENSE)
 
 ---
 

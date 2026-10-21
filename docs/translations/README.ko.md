@@ -1,7 +1,7 @@
 <br />
 <p align="center">
-  <img src=".github/assets/banner-light.ko.png#gh-light-mode-only" alt="Tabularis" width="100%">
-  <img src=".github/assets/banner-dark.ko.png#gh-dark-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-light.ko.png#gh-light-mode-only" alt="Tabularis" width="100%">
+  <img src="../../.github/assets/banner-dark.ko.png#gh-dark-mode-only" alt="Tabularis" width="100%">
 </p>
 
 # Tabularis
@@ -12,7 +12,7 @@ Tabularis는 3종의 내장 데이터베이스 드라이버와 DuckDB, ClickHous
   <b><a href="https://tabularis.dev">웹사이트</a></b> ·
   <b><a href="https://tabularis.dev/wiki">문서</a></b> ·
   <b><a href="https://tabularis.dev/download">다운로드</a></b> ·
-  <b><a href="./CHANGELOG.md">변경 로그</a></b>
+  <b><a href="../../CHANGELOG.md">변경 로그</a></b>
 </p>
 
 <br />
@@ -37,7 +37,7 @@ Tabularis는 3종의 내장 데이터베이스 드라이버와 DuckDB, ClickHous
 
 <p align="center">
   <sub>
-    <a href="./README.md">English</a> ·
+    <a href="../../README.md">English</a> ·
     <a href="./README.it.md">Italiano</a> ·
     <a href="./README.es.md">Español</a> ·
     <a href="./README.zh-CN.md">中文</a> ·
@@ -52,7 +52,7 @@ Tabularis는 3종의 내장 데이터베이스 드라이버와 DuckDB, ClickHous
 </p>
 
 > [!NOTE]
-> 이 문서는 번역된 버전입니다. 가장 최신이자 공식적인 원본은 [영문 README](./README.md)입니다.
+> 이 문서는 번역된 버전입니다. 가장 최신이자 공식적인 원본은 [영문 README](../../README.md)입니다.
 
 <br />
 
@@ -70,11 +70,11 @@ sudo snap install tabularis       # Linux
 
 또는 설치 프로그램을 직접 받으세요:
 
-- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64-setup.exe)
+- **Windows:** &nbsp;[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64-setup.exe)
 
-- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_x64.dmg)
+- **macOS:** &nbsp;[![macOS (Apple Silicon)](https://img.shields.io/badge/macOS-Apple%20Silicon-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_aarch64.dmg)&nbsp;[![macOS (Intel)](https://img.shields.io/badge/macOS-Intel-black?logo=apple)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_x64.dmg)
 
-- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis_0.28.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.28.0/tabularis-0.28.0-1.x86_64.rpm)
+- **Linux:** &nbsp;[![Linux AppImage](https://img.shields.io/badge/Linux-AppImage-green?logo=linux)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.AppImage)&nbsp;[![Linux .deb](https://img.shields.io/badge/Linux-.deb-orange?logo=debian)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis_0.29.0_amd64.deb)&nbsp;[![Linux .rpm](https://img.shields.io/badge/Linux-.rpm-red?logo=redhat)](https://github.com/TabularisDB/tabularis/releases/download/v0.29.0/tabularis-0.29.0-1.x86_64.rpm)
 
 앱 UI는 영어, 이탈리아어, 스페인어, 중국어(간체), 프랑스어, 독일어, 일본어, 러시아어, 한국어, 타갈로그어, 브라질 포르투갈어로 제공됩니다.
 
@@ -282,8 +282,8 @@ yay -S tabularis-bin
 
 - stdin/stdout 기반 JSON-RPC 2.0을 사용하는 외부 플러그인 시스템.
 - 재시작 없이 커뮤니티 드라이버 설치.
-- 공식 레지스트리: [`plugins/registry.json`](./plugins/registry.json).
-- 개발자 가이드: [`plugins/PLUGIN_GUIDE.md`](./plugins/PLUGIN_GUIDE.md).
+- 공식 레지스트리: [`plugins/registry.json`](../../plugins/registry.json).
+- 개발자 가이드: [`plugins/PLUGIN_GUIDE.md`](../../plugins/PLUGIN_GUIDE.md).
 
 ## 설정
 
@@ -372,18 +372,18 @@ pnpm tauri build
 
 ## 로드맵
 
-로드맵은 GitHub 이슈에서 자동으로 생성됩니다. 최신 상태는 [영문 README](./README.md#roadmap)에서 확인하세요.
+로드맵은 GitHub 이슈에서 자동으로 생성됩니다. 최신 상태는 [영문 README](../../README.md#roadmap)에서 확인하세요.
 
 ## 기여하기
 
-기여를 환영합니다. [CONTRIBUTING.md](./CONTRIBUTING.md)를 참고하세요. 다음에서 시작할 수 있습니다:
+기여를 환영합니다. [CONTRIBUTING.md](../../CONTRIBUTING.md)를 참고하세요. 다음에서 시작할 수 있습니다:
 
 - [UI 디자인 시스템 및 비주얼 아이덴티티: 기여자 모집](https://github.com/TabularisDB/tabularis/issues/195)
-- [Plugin Guide](./plugins/PLUGIN_GUIDE.md)를 참고해 원하는 언어로 드라이버 플러그인 작성
+- [Plugin Guide](../../plugins/PLUGIN_GUIDE.md)를 참고해 원하는 언어로 드라이버 플러그인 작성
 
 ## 스폰서 및 후원자
 
-Tabularis는 훌륭한 스폰서와 후원자 덕분에 유지됩니다. 전체 목록은 [영문 README](./README.md#sponsors-and-supporters)와 [tabularis.dev/sponsors](https://tabularis.dev/sponsors)에서 확인하세요.
+Tabularis는 훌륭한 스폰서와 후원자 덕분에 유지됩니다. 전체 목록은 [영문 README](../../README.md#sponsors-and-supporters)와 [tabularis.dev/sponsors](https://tabularis.dev/sponsors)에서 확인하세요.
 
 ## 프로젝트 이야기
 
@@ -391,7 +391,7 @@ Tabularis는 하나의 실험으로 시작했습니다: AI 지원 개발이 처�
 
 ## 라이선스
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](../../LICENSE)
 
 ---
 
