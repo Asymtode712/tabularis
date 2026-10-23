@@ -46,6 +46,11 @@ export function createAsyncResource<T>(initial: T, fetchData: () => Promise<T>) 
     };
 
     return {
+        /** Adopts data fetched elsewhere, so readers need not request it again. */
+        set: (data: T) => {
+            loaded = true;
+            publish({data, loading: false, error: null});
+        },
         getSnapshot: () => snapshot,
         subscribe: (listener: () => void) => {
             listeners.add(listener);

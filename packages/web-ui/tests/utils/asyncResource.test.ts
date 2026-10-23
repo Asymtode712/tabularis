@@ -110,4 +110,13 @@ describe('createAsyncResource', () => {
             expect(resource.getSnapshot()).toEqual({data: 2, loading: false, error: null});
         },
     );
+
+    it('adopts externally fetched data without another request', async () => {
+        const fetchData = vi.fn().mockResolvedValue(1);
+        const resource = createAsyncResource(0, fetchData);
+        resource.set(5);
+        await resource.load();
+        expect(fetchData).not.toHaveBeenCalled();
+        expect(resource.getSnapshot()).toEqual({data: 5, loading: false, error: null});
+    });
 });
