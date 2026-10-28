@@ -1322,6 +1322,9 @@ export const ExplorerSidebar = ({
                                     queries: SavedQuery[];
                                 }) => {
                                     const isCollapsed = collapsedFolders.has(folder.id);
+                                    const allFolderQueries = sorted.filter(
+                                        (q) => q.folder_id === folder.id,
+                                    );
                                     const FolderIcon = isCollapsed ? Folder : FolderOpen;
                                     const actionClass =
                                         'p-1 rounded text-muted hover:text-primary hover:bg-surface-hover opacity-0 group-hover/folder:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus';
@@ -1368,10 +1371,10 @@ export const ExplorerSidebar = ({
                                                     type="button"
                                                     title={t('sidebar.exportFolder')}
                                                     aria-label={`${t('sidebar.exportFolder')}: ${folder.name}`}
-                                                    disabled={folderQueries.length === 0}
+                                                    disabled={allFolderQueries.length === 0}
                                                     onClick={() =>
                                                         void exportSavedQueries(
-                                                            folderQueries,
+                                                            allFolderQueries,
                                                             getSavedQueryExportFileName(
                                                                 folder.name,
                                                             ),

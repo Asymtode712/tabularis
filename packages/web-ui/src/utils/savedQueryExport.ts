@@ -10,9 +10,9 @@ function toCommentValue(value: string): string {
 function formatStatement(sql: string): string {
     const body = sql.trim().replace(/(?:\s*;)+$/, '');
     if (!body) return ';';
-    // A trailing line comment would swallow the terminator on the same line.
+    // A trailing line comment or unterminated block comment would swallow the terminator.
     const lastLine = body.slice(body.lastIndexOf('\n') + 1);
-    return lastLine.includes('--') ? `${body}\n;` : `${body};`;
+    return lastLine.includes('--') || lastLine.includes('/*') ? `${body}\n;` : `${body};`;
 }
 
 /**

@@ -68,5 +68,10 @@ describe('savedQueryExport', () => {
             const out = formatSavedQueriesAsSql([makeQuery({sql: 'SELECT 1 -- note'})], folders);
             expect(out).toBe('-- Name: Query\nSELECT 1 -- note\n;\n');
         });
+
+        it('puts the terminator on its own line after an unterminated block comment', () => {
+            const out = formatSavedQueriesAsSql([makeQuery({sql: 'SELECT 1 /* note'})], folders);
+            expect(out).toBe('-- Name: Query\nSELECT 1 /* note\n;\n');
+        });
     });
 });
