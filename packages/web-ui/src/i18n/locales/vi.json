@@ -383,6 +383,7 @@
     "noQueryHistory": "Chưa có lịch sử truy vấn",
     "noHistorySearchResults": "Không có truy vấn nào khớp với tìm kiếm",
     "searchHistory": "Tìm trong lịch sử...",
+    "historySearchErrors": "Bao gồm thông báo lỗi",
     "historyOutcomeFilter": "Lọc theo kết quả",
     "historyOutcomeAny": "Mọi kết quả",
     "historyOutcomeSucceeded": "Thành công",
@@ -657,6 +658,14 @@
       "title": "Đoạn mã SQL",
       "subtitle": "Xác định các mẫu SQL có thể tái sử dụng với tiền tố kích hoạt và vị trí tab để tự động hoàn thành trong Monaco.",
       "add": "Đoạn mã mới",
+      "exportJson": "Xuất JSON",
+      "exportFailed": "Không thể xuất các đoạn mã: {{error}}",
+      "duplicate": "Nhân bản",
+      "search": "Tìm đoạn mã",
+      "filterScope": "Lọc theo phạm vi",
+      "allScopes": "Mọi phạm vi",
+      "genericScope": "Chung (mọi phương ngữ)",
+      "noMatches": "Không có đoạn mã phù hợp.",
       "createTitle": "Tạo đoạn mã",
       "editTitle": "Chỉnh sửa đoạn mã",
       "nameLabel": "Tên đoạn mã",
@@ -829,6 +838,11 @@
     "appearance_editorWordWrapDesc": "Tự xuống dòng với các dòng dài thay vì cuộn ngang.",
     "appearance_editorMinimap": "Hiện bản đồ thu nhỏ",
     "appearance_editorMinimapDesc": "Hiển thị tổng quan thu nhỏ của các tập lệnh SQL để điều hướng nhanh.",
+    "appearance_editorRenderWhitespace": "Hiện dấu cách và tab",
+    "appearance_editorRenderWhitespaceDesc": "Hiện ký hiệu khoảng trắng thông thường mà không thay đổi văn bản SQL.",
+    "appearance_whitespaceNone": "Không",
+    "appearance_whitespaceSelection": "Vùng chọn",
+    "appearance_whitespaceAll": "Tất cả",
     "appearance_editorHighlightInvisibleCharacters": "Hiện ký tự ẩn",
     "appearance_editorHighlightInvisibleCharactersDesc": "Đánh dấu ký tự Unicode ẩn và ký tự trông giống nhau trong SQL.",
     "appearance_editorShowLineNumbers": "Hiện số dòng",
@@ -979,7 +993,24 @@
       "customOpenaiModelDesc": "Nhập tên model do dịch vụ tương thích OpenAI của bạn cung cấp.",
       "customOpenaiModelHelp": "Nhập chính xác tên model của nhà cung cấp tương thích OpenAI.",
       "promptResetSuccess": "Đã đặt lại prompt về mặc định",
-      "apiKeySaved": "Đã lưu API key an toàn"
+      "apiKeySaved": "Đã lưu API key an toàn",
+      "manageProviders": "Duyệt các nhà cung cấp AI",
+      "retryMigration": "Thử khôi phục lại",
+      "pluginMigration": "Đang khôi phục cài đặt nhà cung cấp AI: {{providers}}.",
+      "providerMissing": "Chưa cài đặt {{provider}}. Hãy cài đặt từ Trung tâm plugin để tiếp tục dùng cấu hình đã lưu.",
+      "availableProviders": "Nhà cung cấp có sẵn",
+      "installProviderHelp": "Cài đặt hoặc gỡ bỏ nhà cung cấp AI bên ngoài ngay trong phần cài đặt này.",
+      "installAndUse": "Cài đặt và sử dụng",
+      "installAndUseProvider": "Cài đặt và sử dụng {{provider}}",
+      "installingProvider": "Đang cài đặt nhà cung cấp…",
+      "providerRegistryOffline": "Không thể kết nối kho nhà cung cấp. Các nhà cung cấp đã cài đặt vẫn có thể sử dụng.",
+      "allProvidersInstalled": "Đã cài đặt tất cả nhà cung cấp có sẵn.",
+      "providerRequiresUpdate": "Nhà cung cấp này yêu cầu phiên bản ứng dụng hoặc nền tảng tương thích.",
+      "builtinProvider": "Tích hợp sẵn",
+      "removeProvider": "Gỡ bỏ {{provider}}",
+      "removingProvider": "Đang gỡ bỏ nhà cung cấp…",
+      "noExternalProviders": "Không có nhà cung cấp bên ngoài.",
+      "activeProviderRemoved": "Nhà cung cấp đang dùng đã bị gỡ bỏ. AI đã bị tắt. Hãy bật AI và chọn nhà cung cấp khác để tiếp tục."
     },
     "updates": "Cập nhật",
     "openSourceLibraries": "Thư viện mã nguồn mở",
@@ -1174,7 +1205,9 @@
         }
       },
       "poweredBy": "Cung cấp bởi",
-      "openHomepage": "Mở trang chủ"
+      "openHomepage": "Mở trang chủ",
+      "kindAiAssistant": "Trợ lý AI",
+      "kindAiAssistants": "Trợ lý AI"
     },
     "shortcuts": {
       "title": "Phím tắt",
@@ -1673,6 +1706,7 @@
       "chooseColumns": "Chọn cột…",
       "title": "Cột",
       "shown": "Đang hiện {{visible}}/{{total}}",
+      "showOnlyMatching": "Chỉ hiện cột khớp",
       "showAll": "Hiện tất cả",
       "lastVisible": "Luôn giữ ít nhất một cột hiển thị",
       "hiddenCount_one": "{{count}} đã ẩn",
@@ -1917,6 +1951,7 @@
     "dangerousQueryTruncateTitle": "Truncate bảng này?",
     "dangerousQueryTruncateMessage": "TRUNCATE xóa mọi dòng trong bảng. Không thể hoàn tác.",
     "showErrorDetails": "Hiện chi tiết",
+    "fixWithAi": "Sửa bằng AI",
     "hideErrorDetails": "Ẩn chi tiết",
     "errorBoundary": {
       "title": "Trình soạn thảo gặp sự cố bất ngờ",
@@ -2171,7 +2206,12 @@
         "operations": "Thao tác",
         "indexName": "Index",
         "scans": "Lượt quét"
-      }
+      },
+      "copied": "Đã sao chép",
+      "copyDetails": "Sao chép chi tiết",
+      "detailsCopied": "Đã sao chép chi tiết nút vào khay nhớ tạm",
+      "copyDetailsFailed": "Không thể sao chép chi tiết nút vào khay nhớ tạm",
+      "nodeDetails": "Chi tiết nút"
     },
     "notebook": {
       "addSqlCell": "Thêm ô SQL",
@@ -2182,6 +2222,10 @@
       "runAllTooltip": "Chạy lần lượt mọi ô SQL từ trên xuống dưới",
       "runCell": "Chạy ô",
       "deleteCell": "Xóa ô",
+      "copySource": "Sao chép nguồn",
+      "copiedSource": "Đã sao chép nguồn vào clipboard",
+      "copySourceFailed": "Không thể sao chép nguồn của ô vào clipboard.",
+      "duplicateCellToEnd": "Nhân bản xuống cuối",
       "moveCellUp": "Chuyển lên",
       "moveCellDown": "Chuyển xuống",
       "export": "Xuất notebook",
@@ -2470,7 +2514,14 @@
     "exportSuccess": "Đã xuất sơ đồ",
     "exportDbml": "Xuất ra DBML",
     "exportMarkdown": "Xuất ra Markdown",
-    "export": "Xuất"
+    "export": "Xuất",
+    "legend": "Chú giải",
+    "primaryKey": "Khóa chính",
+    "primaryKeyDesc": "Cột duy nhất xác định các hàng trong bảng",
+    "foreignKey": "Khóa ngoại",
+    "foreignKeyDesc": "Tham chiếu khóa chính hoặc khóa duy nhất trong bảng khác",
+    "relationship": "Quan hệ",
+    "relationshipDesc": "Tham chiếu khóa ngoại kết nối bảng con và bảng cha"
   },
   "views": {
     "createView": "Tạo view",
@@ -2682,7 +2733,8 @@
     "sideBySide": "Cạnh nhau"
   },
   "textViewer": {
-    "save": "Lưu"
+    "save": "Lưu",
+    "wrapLines": "Tự động xuống dòng"
   },
   "rowEditor": {
     "title": "Sửa dòng",
